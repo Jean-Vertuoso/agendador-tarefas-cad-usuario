@@ -1,15 +1,14 @@
 package com.vertuoso.usuario.business.converters;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.vertuoso.usuario.business.dto.TelefoneDTO;
-import com.vertuoso.usuario.infrastructure.entities.Telefone;
 import org.springframework.stereotype.Component;
 
-import com.vertuoso.usuario.business.dto.UsuarioDTO;
 import com.vertuoso.usuario.business.dto.EnderecoDTO;
+import com.vertuoso.usuario.business.dto.TelefoneDTO;
+import com.vertuoso.usuario.business.dto.UsuarioDTO;
 import com.vertuoso.usuario.infrastructure.entities.Endereco;
+import com.vertuoso.usuario.infrastructure.entities.Telefone;
 import com.vertuoso.usuario.infrastructure.entities.Usuario;
 
 @Component
@@ -61,7 +60,6 @@ public class UsuarioConverter {
         usuarioDTO.setSenha(usuario.getSenha());
         usuarioDTO.setEnderecos(paraListaEnderecoDTO(usuario.getEnderecos()));
         usuarioDTO.setTelefones(paraListaTelefoneDTO(usuario.getTelefones()));
-
         return usuarioDTO;
     }
 
