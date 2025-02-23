@@ -88,4 +88,17 @@ public class UsuarioConverter {
         telefoneDTO.setNumero(telefone.getNumero());
         return telefoneDTO;
     }
+
+    // ATUALIZAR DADOS DO USUARIO RECEBENDO DADOS DO FRONT. CASO NÃO TENHA, PEGA DO BANCO DE DADOS.
+    public Usuario updateUsuario(UsuarioDTO usuarioDTO, Usuario entity){
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioDTO.getNome() != null ? usuarioDTO.getNome() : entity.getNome());
+        usuario.setId(entity.getId());
+        usuario.setSenha(usuarioDTO.getSenha() != null ? usuarioDTO.getSenha() : entity.getSenha());
+        usuario.setEmail(usuarioDTO.getEmail() != null ? usuarioDTO.getEmail() : entity.getEmail());
+        usuario.setEnderecos(entity.getEnderecos());
+        usuario.setTelefones(entity.getTelefones());
+
+        return usuario;
+    }
 }

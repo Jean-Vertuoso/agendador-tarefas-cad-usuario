@@ -1,5 +1,6 @@
 package com.vertuoso.usuario.business.services;
 
+import com.vertuoso.usuario.infrastructure.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,11 +19,13 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     private UsuarioConverter usuarioConverter;
     private PasswordEncoder passwordEncoder;
+    private JwtUtil jwtUtil;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioConverter usuarioConverter, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioConverter usuarioConverter, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioConverter = usuarioConverter;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     public UsuarioDTO salvaUsuario(UsuarioDTO usuarioDTO){
@@ -59,5 +62,23 @@ public class UsuarioService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deletaUsuarioPorEmail(String email){
         usuarioRepository.deleteByEmail(email);
+    }
+
+    public UsuarioDTO atualizaDadosUsuario(String token, UsuarioDTO dto){
+        //Aqui buscamos o email do usuário através do token (tirar a obrigatoriedade do email)
+        String email = jwtUtil.extrairEmailToken(token.substring(7));
+
+        //Criptografia de senha
+        dto.setSenha(dto.getSenha() != null ? passwordEncoder.encode(dto.getSenha()) : null);
+
+        //Busca os dados do usuário no banco de dados
+        Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow(() ->
+            new ResourceNotFoundException("E-mail não localizado"));
+
+        //Mesclou os dados que recebemos na requisição DTO com os dados do banco de dados
+        Usuario usuario = usuarioConverter.updateUsuario(dto, usuarioEntity);
+
+        //Salvou os dados do usuário convertido e depois pegou o retorno e converteu para UsuarioDTO.
+        return usuarioConverter.paraUsuarioDTO(usuarioRepository.save(usuario));
     }
 }
