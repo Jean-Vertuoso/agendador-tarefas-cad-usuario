@@ -2,6 +2,7 @@ package com.vertuoso.usuario.business.dto;
 
 public class EnderecoDTO {
 
+    private Long id;
     private String rua;
     private Long numero;
     private String complemento;
@@ -12,13 +13,22 @@ public class EnderecoDTO {
     public EnderecoDTO() {
     }
 
-    public EnderecoDTO(String rua, Long numero, String complemento, String cidade, String estado, String cep) {
+    public EnderecoDTO(Long id, String rua, Long numero, String complemento, String cidade, String estado, String cep) {
+        this.id = id;
         this.rua = rua;
         this.numero = numero;
         this.complemento = complemento;
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRua() {
