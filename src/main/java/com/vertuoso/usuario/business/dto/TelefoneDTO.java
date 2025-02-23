@@ -2,6 +2,7 @@ package com.vertuoso.usuario.business.dto;
 
 public class TelefoneDTO {
 
+    private Long id;
     private String ddd;
     private String numero;
 
@@ -9,8 +10,17 @@ public class TelefoneDTO {
     }
 
     public TelefoneDTO(String ddd, String numero) {
+        this.id = id;
         this.ddd = ddd;
         this.numero = numero;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDdd() {

@@ -69,6 +69,7 @@ public class UsuarioConverter {
 
     public EnderecoDTO paraEnderecoDTO(Endereco endereco){
         EnderecoDTO enderecoDTO = new EnderecoDTO();
+        enderecoDTO.setId(endereco.getId());
         enderecoDTO.setRua(endereco.getRua());
         enderecoDTO.setNumero(endereco.getNumero());
         enderecoDTO.setCidade(endereco.getCidade());
@@ -84,8 +85,44 @@ public class UsuarioConverter {
 
     public TelefoneDTO paraTelefoneDTO(Telefone telefone){
         TelefoneDTO telefoneDTO = new TelefoneDTO();
+        telefoneDTO.setId(telefone.getId());
         telefoneDTO.setDdd(telefone.getDdd());
         telefoneDTO.setNumero(telefone.getNumero());
         return telefoneDTO;
+    }
+
+    // ATUALIZAR DADOS DO USUARIO RECEBENDO DADOS DO FRONT. CASO NÃO TENHA, PEGA DO BANCO DE DADOS.
+    public Usuario updateUsuario(UsuarioDTO usuarioDTO, Usuario entity){
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioDTO.getNome() != null ? usuarioDTO.getNome() : entity.getNome());
+        usuario.setId(entity.getId());
+        usuario.setSenha(usuarioDTO.getSenha() != null ? usuarioDTO.getSenha() : entity.getSenha());
+        usuario.setEmail(usuarioDTO.getEmail() != null ? usuarioDTO.getEmail() : entity.getEmail());
+        usuario.setEnderecos(entity.getEnderecos());
+        usuario.setTelefones(entity.getTelefones());
+
+        return usuario;
+    }
+
+    public Endereco updateEndereco(EnderecoDTO dto, Endereco entity){
+        Endereco endereco = new Endereco();
+        endereco.setId(entity.getId());
+        endereco.setRua(dto.getRua() != null ? dto.getRua() : entity.getRua());
+        endereco.setNumero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero());
+        endereco.setCidade(dto.getCidade() != null ? dto.getCidade() : entity.getCidade());
+        endereco.setCep(dto.getCep() != null ? dto.getCep() : entity.getCep());
+        endereco.setComplemento(dto.getComplemento() != null ? dto.getComplemento() : entity.getComplemento());
+        endereco.setEstado(dto.getEstado() != null ? dto.getEstado() : entity.getEstado());
+
+        return endereco;
+    }
+
+    public Telefone updateTelefone(TelefoneDTO dto, Telefone entity){
+        Telefone telefone = new Telefone();
+        telefone.setId(entity.getId());
+        telefone.setDdd(dto.getDdd() != null ? dto.getDdd() : entity.getDdd());
+        telefone.setNumero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero());
+
+        return telefone;
     }
 }
