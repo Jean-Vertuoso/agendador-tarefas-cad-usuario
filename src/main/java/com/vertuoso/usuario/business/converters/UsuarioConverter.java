@@ -125,4 +125,25 @@ public class UsuarioConverter {
 
         return telefone;
     }
+
+    public Endereco paraEnderecoEntity(EnderecoDTO enderecoDTO, Long idUsuario){
+        Endereco endereco = new Endereco();
+        endereco.setRua(enderecoDTO.getRua());
+        endereco.setCidade(enderecoDTO.getCidade());
+        endereco.setCep(enderecoDTO.getCep());
+        endereco.setComplemento(enderecoDTO.getComplemento());
+        endereco.setEstado(enderecoDTO.getEstado());
+        endereco.setNumero(enderecoDTO.getNumero());
+        endereco.setUsuario_id(idUsuario);
+
+        return endereco;
+    }
+    public Telefone paraTelefoneEntity(TelefoneDTO telefoneDTO, Long idUsuario){
+        Telefone telefone = new Telefone();
+        telefone.setDdd(telefoneDTO.getDdd());
+        telefone.setNumero(telefoneDTO.getNumero());
+        telefone.setUsuario_id(idUsuario);
+
+        return telefone;
+    }
 }
