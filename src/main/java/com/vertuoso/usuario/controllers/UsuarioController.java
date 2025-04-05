@@ -2,17 +2,14 @@ package com.vertuoso.usuario.controllers;
 
 import com.vertuoso.usuario.business.dto.EnderecoDTO;
 import com.vertuoso.usuario.business.dto.TelefoneDTO;
-import org.apache.coyote.Response;
+import com.vertuoso.usuario.business.dto.UsuarioDTO;
+import com.vertuoso.usuario.business.services.UsuarioService;
+import com.vertuoso.usuario.infrastructure.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import com.vertuoso.usuario.business.dto.UsuarioDTO;
-import com.vertuoso.usuario.business.services.UsuarioService;
-import com.vertuoso.usuario.infrastructure.entities.Usuario;
-import com.vertuoso.usuario.infrastructure.security.JwtUtil;
 
 @RestController
 @RequestMapping("/usuario")
