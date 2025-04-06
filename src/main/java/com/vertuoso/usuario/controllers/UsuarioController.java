@@ -3,8 +3,11 @@ package com.vertuoso.usuario.controllers;
 import com.vertuoso.usuario.business.dto.EnderecoDTO;
 import com.vertuoso.usuario.business.dto.TelefoneDTO;
 import com.vertuoso.usuario.business.dto.UsuarioDTO;
+import com.vertuoso.usuario.business.dto.ViaCepDTO;
 import com.vertuoso.usuario.business.services.UsuarioService;
+import com.vertuoso.usuario.business.services.ViaCepService;
 import com.vertuoso.usuario.infrastructure.security.JwtUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,16 +16,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
+@Tag(name = "Usuários", description = "Cadastro e gerenciamento de usuários")
 public class UsuarioController {
 
-    private UsuarioService usuarioService;
-    private AuthenticationManager authenticationManager;
-    private JwtUtil jwtUtil;
+    private final UsuarioService usuarioService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final ViaCepService viaCepService;
 
-    public UsuarioController(UsuarioService usuarioService, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public UsuarioController(UsuarioService usuarioService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, ViaCepService viaCepService) {
         this.usuarioService = usuarioService;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.viaCepService = viaCepService;
     }
 
     @PostMapping("/login")
@@ -79,4 +85,10 @@ public class UsuarioController {
                                                        @RequestHeader("Authorization") String token){
         return ResponseEntity.ok(usuarioService.cadastraTelefone(token, dto));
     }
+
+    @GetMapping("/endereco/{cep}")
+    public ResponseEntity<ViaCepDTO> buscarDadosCep(@PathVariable String cep){
+        return ResponseEntity.ok(viaCepService.buscarDadosEndereco(cep));
+    }
+
 }
