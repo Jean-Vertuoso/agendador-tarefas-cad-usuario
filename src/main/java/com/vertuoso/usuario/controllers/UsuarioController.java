@@ -6,12 +6,14 @@ import com.vertuoso.usuario.business.dto.UsuarioDTO;
 import com.vertuoso.usuario.business.dto.ViaCepDTO;
 import com.vertuoso.usuario.business.services.UsuarioService;
 import com.vertuoso.usuario.business.services.ViaCepService;
+import com.vertuoso.usuario.infrastructure.exceptions.UnauthorizedException;
 import com.vertuoso.usuario.infrastructure.security.JwtUtil;
 import com.vertuoso.usuario.infrastructure.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,14 +27,10 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
     private final ViaCepService viaCepService;
 
-    public UsuarioController(UsuarioService usuarioService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, ViaCepService viaCepService) {
+    public UsuarioController(UsuarioService usuarioService, ViaCepService viaCepService) {
         this.usuarioService = usuarioService;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
         this.viaCepService = viaCepService;
     }
 
@@ -41,12 +39,8 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Usuário logado com sucesso")
     @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public String login(@RequestBody UsuarioDTO usuarioDTO){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(),
-                        usuarioDTO.getSenha())
-        );
-        return "Bearer " + jwtUtil.generateToken(authentication.getName());
+    public ResponseEntity<String> login(@RequestBody UsuarioDTO usuarioDTO) throws UnauthorizedException {
+        return ResponseEntity.ok(usuarioService.autenticarUsuario(usuarioDTO));
     }
 
     @GetMapping
