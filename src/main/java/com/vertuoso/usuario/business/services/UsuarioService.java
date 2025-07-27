@@ -1,5 +1,11 @@
 package com.vertuoso.usuario.business.services;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,6 +20,7 @@ import com.vertuoso.usuario.infrastructure.entities.Telefone;
 import com.vertuoso.usuario.infrastructure.entities.Usuario;
 import com.vertuoso.usuario.infrastructure.exceptions.ConflictException;
 import com.vertuoso.usuario.infrastructure.exceptions.ResourceNotFoundException;
+import com.vertuoso.usuario.infrastructure.exceptions.UnauthorizedException;
 import com.vertuoso.usuario.infrastructure.repositories.EnderecoRepository;
 import com.vertuoso.usuario.infrastructure.repositories.TelefoneRepository;
 import com.vertuoso.usuario.infrastructure.repositories.UsuarioRepository;
@@ -22,20 +29,22 @@ import com.vertuoso.usuario.infrastructure.security.JwtUtil;
 @Service
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository;
-    private EnderecoRepository enderecoRepository;
-    private TelefoneRepository telefoneRepository;
-    private UsuarioConverter usuarioConverter;
-    private PasswordEncoder passwordEncoder;
-    private JwtUtil jwtUtil;
+    private final UsuarioRepository usuarioRepository;
+    private final EnderecoRepository enderecoRepository;
+    private final TelefoneRepository telefoneRepository;
+    private final UsuarioConverter usuarioConverter;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, EnderecoRepository enderecoRepository, TelefoneRepository telefoneRepository, UsuarioConverter usuarioConverter, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public UsuarioService(UsuarioRepository usuarioRepository, EnderecoRepository enderecoRepository, TelefoneRepository telefoneRepository, UsuarioConverter usuarioConverter, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
         this.usuarioRepository = usuarioRepository;
         this.enderecoRepository = enderecoRepository;
         this.telefoneRepository = telefoneRepository;
         this.usuarioConverter = usuarioConverter;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
     }
 
     public UsuarioDTO salvaUsuario(UsuarioDTO usuarioDTO){
@@ -45,6 +54,18 @@ public class UsuarioService {
         return usuarioConverter.paraUsuarioDTO(
                 usuarioRepository.save(usuario)
         );
+    }
+
+    public String autenticarUsuario(UsuarioDTO usuarioDTO) throws UnauthorizedException {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(),
+                            usuarioDTO.getSenha())
+            );
+            return "Bearer " + jwtUtil.generateToken(authentication.getName());
+        } catch(BadCredentialsException | UsernameNotFoundException | AuthorizationDeniedException ex) {
+            throw new UnauthorizedException("Usuário ou senha inválidos: ", ex.getCause());
+        }
     }
 
     public void emailExiste(String email){
