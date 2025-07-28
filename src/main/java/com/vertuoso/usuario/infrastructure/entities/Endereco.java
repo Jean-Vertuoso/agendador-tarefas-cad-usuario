@@ -31,12 +31,12 @@ public class Endereco {
     private String cep;
 
     @Column(name = "usuario_id")
-    private Long usuario_id;
+    private Long usuarioId;
 
     public Endereco() {
     }
 
-    public Endereco(Long id, String rua, Long numero, String complemento, String cidade, String estado, String cep, Long usuario_id) {
+    public Endereco(Long id, String rua, Long numero, String complemento, String cidade, String estado, String cep, Long usuarioId) {
         this.id = id;
         this.rua = rua;
         this.numero = numero;
@@ -44,7 +44,7 @@ public class Endereco {
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
-        this.usuario_id = usuario_id;
+        this.usuarioId = usuarioId;
     }
 
     public Long getId() {
@@ -103,12 +103,12 @@ public class Endereco {
         this.cep = cep;
     }
 
-    public Long getUsuario_id() {
-        return usuario_id;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsuario_id(Long usuario_id) {
-        this.usuario_id = usuario_id;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     @Override

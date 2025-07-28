@@ -1,15 +1,13 @@
 package com.vertuoso.usuario.infrastructure.entities;
 
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-
-import com.vertuoso.usuario.business.dto.EnderecoDTO;
-import com.vertuoso.usuario.business.dto.UsuarioDTO;
-import jakarta.persistence.*;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -30,11 +28,11 @@ public class Usuario implements UserDetails{
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private List<Endereco> enderecos;
+    private List<Endereco> enderecos = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private List<Telefone> telefones;
+    private List<Telefone> telefones = new ArrayList<>();
 
     public Usuario() {
     }
@@ -62,16 +60,8 @@ public class Usuario implements UserDetails{
         this.nome = nome;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
     }
 
     public void setSenha(String senha) {
