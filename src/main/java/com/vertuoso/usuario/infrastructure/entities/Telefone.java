@@ -19,16 +19,16 @@ public class Telefone {
     private String ddd;
 
     @Column(name = "usuario_id")
-    private Long usuario_id;
+    private Long usuarioId;
 
     public Telefone() {
     }
 
-    public Telefone(String numero, Long id, String ddd, Long usuario_id) {
+    public Telefone(String numero, Long id, String ddd, Long usuarioId) {
         this.numero = numero;
         this.id = id;
         this.ddd = ddd;
-        this.usuario_id = usuario_id;
+        this.usuarioId = usuarioId;
     }
 
     public Long getId() {
@@ -55,12 +55,12 @@ public class Telefone {
         this.ddd = ddd;
     }
 
-    public Long getUsuario_id() {
-        return usuario_id;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsuario_id(Long usuario_id) {
-        this.usuario_id = usuario_id;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     @Override

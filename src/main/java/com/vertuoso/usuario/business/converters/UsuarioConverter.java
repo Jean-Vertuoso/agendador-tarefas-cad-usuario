@@ -56,8 +56,8 @@ public class UsuarioConverter {
     public UsuarioDTO paraUsuarioDTO(Usuario usuario){
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         usuarioDTO.setNome(usuario.getNome());
-        usuarioDTO.setEmail(usuario.getEmail());
-        usuarioDTO.setSenha(usuario.getSenha());
+        usuarioDTO.setEmail(usuario.getUsername());
+        usuarioDTO.setSenha(usuario.getPassword());
         usuarioDTO.setEnderecos(paraListaEnderecoDTO(usuario.getEnderecos()));
         usuarioDTO.setTelefones(paraListaTelefoneDTO(usuario.getTelefones()));
         return usuarioDTO;
@@ -96,8 +96,8 @@ public class UsuarioConverter {
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioDTO.getNome() != null ? usuarioDTO.getNome() : entity.getNome());
         usuario.setId(entity.getId());
-        usuario.setSenha(usuarioDTO.getSenha() != null ? usuarioDTO.getSenha() : entity.getSenha());
-        usuario.setEmail(usuarioDTO.getEmail() != null ? usuarioDTO.getEmail() : entity.getEmail());
+        usuario.setSenha(usuarioDTO.getSenha() != null ? usuarioDTO.getSenha() : entity.getPassword());
+        usuario.setEmail(usuarioDTO.getEmail() != null ? usuarioDTO.getEmail() : entity.getUsername());
         usuario.setEnderecos(entity.getEnderecos());
         usuario.setTelefones(entity.getTelefones());
 
@@ -113,6 +113,7 @@ public class UsuarioConverter {
         endereco.setCep(dto.getCep() != null ? dto.getCep() : entity.getCep());
         endereco.setComplemento(dto.getComplemento() != null ? dto.getComplemento() : entity.getComplemento());
         endereco.setEstado(dto.getEstado() != null ? dto.getEstado() : entity.getEstado());
+        endereco.setUsuarioId(entity.getUsuarioId());
 
         return endereco;
     }
@@ -122,6 +123,7 @@ public class UsuarioConverter {
         telefone.setId(entity.getId());
         telefone.setDdd(dto.getDdd() != null ? dto.getDdd() : entity.getDdd());
         telefone.setNumero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero());
+        telefone.setUsuarioId(entity.getUsuarioId());
 
         return telefone;
     }
@@ -134,7 +136,7 @@ public class UsuarioConverter {
         endereco.setComplemento(enderecoDTO.getComplemento());
         endereco.setEstado(enderecoDTO.getEstado());
         endereco.setNumero(enderecoDTO.getNumero());
-        endereco.setUsuario_id(idUsuario);
+        endereco.setUsuarioId(idUsuario);
 
         return endereco;
     }
@@ -142,7 +144,7 @@ public class UsuarioConverter {
         Telefone telefone = new Telefone();
         telefone.setDdd(telefoneDTO.getDdd());
         telefone.setNumero(telefoneDTO.getNumero());
-        telefone.setUsuario_id(idUsuario);
+        telefone.setUsuarioId(idUsuario);
 
         return telefone;
     }
