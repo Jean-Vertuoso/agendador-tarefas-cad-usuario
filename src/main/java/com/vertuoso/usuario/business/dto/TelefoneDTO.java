@@ -9,7 +9,7 @@ public class TelefoneDTO {
     public TelefoneDTO() {
     }
 
-    public TelefoneDTO(String ddd, String numero) {
+    public TelefoneDTO(Long id, String ddd, String numero) {
         this.id = id;
         this.ddd = ddd;
         this.numero = numero;
